@@ -1,11 +1,9 @@
-# Derleme çıktılarını engelle ama klasörleri koru
 bin/*
 !bin/.gitkeep
 
 lib/*
 !lib/.gitkeep
 
-# Genel derleme ve editör çöpleri
 *.o
 *.exe
 *.out
