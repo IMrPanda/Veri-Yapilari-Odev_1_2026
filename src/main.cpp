@@ -1,17 +1,18 @@
 #include <iostream>
-#include "Matris.hpp"
+#include "AnaListe.hpp"
+#include "DosyaYoneticisi.hpp"
 
-using namespace std;
+using namespace std;   // test 
 
 int main() {
-    Matris* m = new Matris(3, 2); // 3 sütun, 2 satır   // kontrol testi
-    for (int i = 1; i <= 6; i++) {
-        m->sonaEkle(i * 10);
-    }
+    AnaListe* liste = new AnaListe();
+    DosyaYoneticisi* dosya = new DosyaYoneticisi();
 
-    m->yazdir();
-    cout << "Ortalama: " << m->artOrt() << endl;
+    dosya->dosyadanOku("kayitlar.txt", liste);
+    cout << "Toplam okunan matris: " << liste->getDugumSayisi() << endl;
+    liste->ozetYazdir();
 
-    delete m;
+    delete dosya;
+    delete liste;
     return 0;
 }
