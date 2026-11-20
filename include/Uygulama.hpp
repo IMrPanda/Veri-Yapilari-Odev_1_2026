@@ -24,8 +24,15 @@ private:
 	int seciliIndex;
 
 	void anaEkraniGoster() const;
+	void eklendiEkrani(ListeDugum* yeniDugum) const;
 	void yukariGit();
 	void asagiGit();
+
+	// ----------------------------------------------
+	// matris ekleme ve silme
+	Matris* rastgMatrisUret() const;
+	void onMatrisEkle();
+	void arkaMatrisEkle();
 
 
 public:

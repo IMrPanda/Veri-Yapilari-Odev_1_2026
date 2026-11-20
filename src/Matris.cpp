@@ -71,3 +71,15 @@ void Matris::yazdir() const {
 int Matris::getSutun() const { return sutun; }
 int Matris::getSatir() const { return satir; }
 bool Matris::MatrisBosMu() const { return ilk == nullptr; }
+
+// -----------------------------------------------
+
+void Matris::dosyaYaz(ostream& out) const {
+    out << sutun << " " << satir;
+    HucreDugum* gec = ilk;
+    while (gec != nullptr) {
+        out << " " << gec->veri;
+        gec = gec->sonraki;
+    }
+    out << "\n";
+}

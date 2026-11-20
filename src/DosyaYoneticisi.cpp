@@ -14,7 +14,7 @@
 
 using namespace std;
 
-void DosyaYoneticisi::dosyadanOku(const string& dosyaAdi, AnaListe* liste) {
+void DosyaYoneticisi::dosyaOku(const string& dosyaAdi, AnaListe* liste) {
     ifstream dosya(dosyaAdi);
     if (!dosya.is_open()) { 
         cout << "Hata: " << dosyaAdi << " dosyasi acilamadi!" << endl; // dosya açılamadıysa hata mesajı ver
@@ -44,6 +44,23 @@ void DosyaYoneticisi::dosyadanOku(const string& dosyaAdi, AnaListe* liste) {
             delete matris;
         }
 
+    }
+
+    dosya.close();
+}
+
+
+void DosyaYoneticisi::dosyaKaydet(const string& dosyaAdi, const AnaListe* liste) {
+    ofstream dosya(dosyaAdi, ios::trunc); // dosyayı sıfırla ve baştan yaz
+    if (!dosya.is_open()) {
+        cout << "Hata: " << dosyaAdi << " dosyasi kaydedilemedi!" << endl;
+        return;
+    }
+
+    ListeDugum* gec = liste->getIlk();
+    while (gec != nullptr) {
+        gec->matris->dosyaYaz(dosya);
+        gec = gec->sonraki;
     }
 
     dosya.close();

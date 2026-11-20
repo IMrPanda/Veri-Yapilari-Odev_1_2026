@@ -71,6 +71,104 @@ void AnaListe::ozetYazdir() const {
     }
 }
 
+// ----------------------------------------------
+// matris ekleme ve silme
+ListeDugum* AnaListe::onEkle(ListeDugum* hedef, Matris* matris) {
+    ListeDugum* yeni = new ListeDugum(matris);
+    if (ilk == nullptr || hedef == nullptr) {
+        ilk = yeni;
+        son = yeni;
+    } else if (hedef == ilk) {
+        yeni->sonraki = ilk;
+        ilk->onceki = yeni;
+        ilk = yeni;
+    } else {
+        ListeDugum* oncekiDugum = hedef->onceki;
+        oncekiDugum->sonraki = yeni;
+        yeni->onceki = oncekiDugum;
+        yeni->sonraki = hedef;
+        hedef->onceki = yeni;
+    }
+    dugumSayisi++;
+    return yeni;
+}
+
+ListeDugum* AnaListe::arkaEkle(ListeDugum* hedef, Matris* matris) {
+    ListeDugum* yeni = new ListeDugum(matris);
+    if (ilk == nullptr || hedef == nullptr) {
+        ilk = yeni;
+        son = yeni;
+    } else if (hedef == son) {
+        son->sonraki = yeni;
+        yeni->onceki = son;
+        son = yeni;
+    } else {
+        ListeDugum* sonrakiDugum = hedef->sonraki;
+        hedef->sonraki = yeni;
+        yeni->onceki = hedef;
+        yeni->sonraki = sonrakiDugum;
+        sonrakiDugum->onceki = yeni;
+    }
+    dugumSayisi++;
+    return yeni;
+}
+
+void AnaListe::ortGoreSirala() {
+    if (ilk == nullptr || ilk->sonraki == nullptr) return;
+
+    ListeDugum* yeniIlk = nullptr;
+    ListeDugum* yeniSon = nullptr;
+    ListeDugum* gec = ilk;
+
+    while (gec != nullptr) {
+        ListeDugum* siradaki = gec->sonraki;
+        gec->onceki = nullptr;
+        gec->sonraki = nullptr;
+        double ort = gec->matris->artOrt();
+
+        if (yeniIlk == nullptr) {
+            yeniIlk = gec;
+            yeniSon = gec;
+        } else if (ort <= yeniIlk->matris->artOrt()) {
+            gec->sonraki = yeniIlk;
+            yeniIlk->onceki = gec;
+            yeniIlk = gec;
+        } else if (ort >= yeniSon->matris->artOrt()) {
+            yeniSon->sonraki = gec;
+            gec->onceki = yeniSon;
+            yeniSon = gec;
+        } else {
+            ListeDugum* konum = yeniIlk->sonraki;
+            while (konum != nullptr && konum->matris->artOrt() < ort) {
+                konum = konum->sonraki;
+            }
+            ListeDugum* oncekiDugum = konum->onceki;
+            oncekiDugum->sonraki = gec;
+            gec->onceki = oncekiDugum;
+            gec->sonraki = konum;
+            konum->onceki = gec;
+        }
+
+        gec = siradaki;
+    }
+
+    ilk = yeniIlk;
+    son = yeniSon;
+}
+
+int AnaListe::indexBul(ListeDugum* aranan) const {
+    ListeDugum* gec = ilk;
+    int indeks = 0;
+    while (gec != nullptr) {
+        if (gec == aranan) return indeks;
+        gec = gec->sonraki;
+        indeks++;
+    }
+    return -1;
+}
+
+// ----------------------------------------------
+// get 
 ListeDugum* AnaListe::getIlk() const { return ilk; }
 ListeDugum* AnaListe::getSon() const { return son; }
 int AnaListe::getDugumSayisi() const { return dugumSayisi; }

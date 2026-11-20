@@ -15,7 +15,8 @@
 
 class DosyaYoneticisi {
 public:
-    void dosyadanOku(const std::string& dosyaAdi, AnaListe* liste);
+    void dosyaOku(const std::string& dosyaAdi, AnaListe* liste);
+    void dosyaKaydet(const std::string& dosyaAdi, const AnaListe* liste);
 };
 
 #endif

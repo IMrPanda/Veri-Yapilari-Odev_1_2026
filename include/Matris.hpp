@@ -11,6 +11,8 @@
 #define MATRIS_HPP
 
 #include "HucreDugum.hpp"
+#include <iostream>
+using namespace std;
 
 class Matris {
 private:
@@ -30,6 +32,11 @@ public:
     int getSutun() const; // sütun sayısı
     int getSatir() const; // satır sayısı
     bool MatrisBosMu() const; // matris boş mu
+
+    // ----------------------------------------------
+    
+    void dosyaYaz(std::ostream& out) const; // dosya yazma
+
 };
 
 #endif

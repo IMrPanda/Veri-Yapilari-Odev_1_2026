@@ -30,7 +30,15 @@ public:
     ListeDugum* getSon() const;
     int getDugumSayisi() const;
     bool ListeBosMu() const;
+
+    // ----------------------------------------------
+    // matris ekleme ve silme 
+    ListeDugum* onEkle(ListeDugum* hedef, Matris* matris);
+    ListeDugum* arkaEkle(ListeDugum* hedef, Matris* matris);
+    void ortGoreSirala();
+    int indexBul(ListeDugum* aranan) const;
     
+    // ----------------------------------------------
     // konsol 
     ListeDugum* dugumGetir(int indeks) const;
 
