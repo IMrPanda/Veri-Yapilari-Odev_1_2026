@@ -75,3 +75,14 @@ ListeDugum* AnaListe::getIlk() const { return ilk; }
 ListeDugum* AnaListe::getSon() const { return son; }
 int AnaListe::getDugumSayisi() const { return dugumSayisi; }
 bool AnaListe::ListeBosMu() const { return ilk == nullptr; }
+
+
+// konsol
+ListeDugum* AnaListe::dugumGetir(int indeks) const {
+    if (indeks < 0 || indeks >= dugumSayisi) return nullptr;
+    ListeDugum* gec = ilk;
+    for (int i = 0; i < indeks; i++) {
+        gec = gec->sonraki;
+    }
+    return gec;
+}

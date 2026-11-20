@@ -1,18 +1,8 @@
-#include <iostream>
-#include "AnaListe.hpp"
-#include "DosyaYoneticisi.hpp"
-
-using namespace std;   // test 
+#include "Uygulama.hpp"
 
 int main() {
-    AnaListe* liste = new AnaListe();
-    DosyaYoneticisi* dosya = new DosyaYoneticisi();
-
-    dosya->dosyadanOku("kayitlar.txt", liste);
-    cout << "Toplam okunan matris: " << liste->getDugumSayisi() << endl;
-    liste->ozetYazdir();
-
-    delete dosya;
-    delete liste;
+    Uygulama* app = new Uygulama("kayitlar.txt");
+    app->calistir();
+    delete app;
     return 0;
 }

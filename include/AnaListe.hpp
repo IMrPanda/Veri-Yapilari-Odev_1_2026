@@ -30,6 +30,10 @@ public:
     ListeDugum* getSon() const;
     int getDugumSayisi() const;
     bool ListeBosMu() const;
+    
+    // konsol 
+    ListeDugum* dugumGetir(int indeks) const;
+
 };
 
 #endif
