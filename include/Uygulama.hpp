@@ -29,10 +29,16 @@ private:
 	void asagiGit();
 
 	// ----------------------------------------------
-	// matris ekleme ve silme
+	// matris ekleme
 	Matris* rastgMatrisUret() const;
 	void onMatrisEkle();
 	void arkaMatrisEkle();
+
+	// matris silme
+	void matrisIslemMenusu();
+	bool satirSil();
+	bool sutunSil();
+	void satirSutunDegistir();
 
 
 public:

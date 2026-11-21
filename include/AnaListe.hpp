@@ -41,6 +41,7 @@ public:
     // ----------------------------------------------
     // konsol 
     ListeDugum* dugumGetir(int indeks) const;
+    ListeDugum* dugumSil(ListeDugum* silinecek);
 
 };
 

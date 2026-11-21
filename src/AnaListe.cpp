@@ -184,3 +184,26 @@ ListeDugum* AnaListe::dugumGetir(int indeks) const {
     }
     return gec;
 }
+
+ListeDugum* AnaListe::dugumSil(ListeDugum* silinecek) {
+    if (silinecek == nullptr) return nullptr;
+
+    ListeDugum* yeniSecili = (silinecek->sonraki != nullptr) ? silinecek->sonraki : silinecek->onceki;
+
+    if (silinecek->onceki != nullptr) {
+        silinecek->onceki->sonraki = silinecek->sonraki;
+    } else {
+        ilk = silinecek->sonraki;
+    }
+
+    if (silinecek->sonraki != nullptr) {
+        silinecek->sonraki->onceki = silinecek->onceki;
+    } else {
+        son = silinecek->onceki;
+    }
+    delete silinecek; 
+
+    dugumSayisi--;
+
+    return yeniSecili;
+}

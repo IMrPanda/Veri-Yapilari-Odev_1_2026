@@ -21,6 +21,16 @@ private:
     int sutun;  
     int satir;  
 
+    // --------------------------------------------
+    // aşırı fazla matris olursa O(1) yapmak için 
+    long long toplam;   
+    int elemanSayisi;
+
+    // ---------------------------------------------
+    // dügümü komple silmek 
+    HucreDugum* hucreGetir(int r, int c) const;
+    void dugumKompleSil(HucreDugum* hedef);
+
 public:
     Matris(int sutun, int satir);  // kurucu
     ~Matris(); // yıkıcı
@@ -34,8 +44,16 @@ public:
     bool MatrisBosMu() const; // matris boş mu
 
     // ----------------------------------------------
-    
     void dosyaYaz(std::ostream& out) const; // dosya yazma
+
+
+    //------------------------------------------------
+    // matris işlemleri
+    void satirSil(int silinecekSatir);
+    void sutunSil(int silinecekSutun);
+    bool satirSutunDegistir(int satirNo, int sutunNo);
+    void yazdirSeciliSatir(int seciliSatir) const;
+    void yazdirSeciliSutun(int seciliSutun) const;
 
 };
 

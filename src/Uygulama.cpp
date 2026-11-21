@@ -121,10 +121,13 @@ void Uygulama::eklendiEkrani(ListeDugum* yeniDugum) const {
 void Uygulama::onMatrisEkle() {
     Matris* yeniMatris = rastgMatrisUret();
     ListeDugum* yeniDugum = liste->onEkle(seciliDugum, yeniMatris);
+
+    if (seciliDugum == nullptr) seciliDugum = yeniDugum; // listede matris yoksa yeni eklenen matrisi göster
     seciliIndex = liste->indexBul(seciliDugum);
 
     eklendiEkrani(yeniDugum);
     cin.get();
+
 
     liste->ortGoreSirala();
     seciliIndex = liste->indexBul(seciliDugum);
@@ -133,10 +136,13 @@ void Uygulama::onMatrisEkle() {
 void Uygulama::arkaMatrisEkle() {
     Matris* yeniMatris = rastgMatrisUret();
     ListeDugum* yeniDugum = liste->arkaEkle(seciliDugum, yeniMatris);
+
+    if (seciliDugum == nullptr) seciliDugum = yeniDugum; // listede matris yoksa yeni eklenen matrisi göster
     seciliIndex = liste->indexBul(seciliDugum);
 
     eklendiEkrani(yeniDugum);
     cin.get();
+
 
     liste->ortGoreSirala();
     seciliIndex = liste->indexBul(seciliDugum);
@@ -183,6 +189,191 @@ void Uygulama::anaEkraniGoster() const {
     cout << "Seciminiz: ";
 }
 
+void Uygulama::matrisIslemMenusu() {
+    bool degisiklikOldu = false;
+    bool dugumSilindi = false;
+    char secim;
+
+    while (true) {
+        system("cls");
+        cout << "=== MATRIS ISLEM MENUSU (Adres: " << seciliDugum
+             << " | Boyut: " << seciliDugum->matris->getSutun() << "x" << seciliDugum->matris->getSatir()
+             << " | Ort: " << fixed << setprecision(2) << seciliDugum->matris->artOrt()
+             << ") ===" << endl << endl;
+
+        seciliDugum->matris->yazdir();
+
+        cout << endl << "[1] Satir Sil   [2] Sutun Sil   [3] Satir-Sutun Degistir   [X] Ana Menuye Don" << endl;
+        cout << "Seciminiz: ";
+        cin >> secim;
+        cin.ignore(1000, '\n');
+        secim = static_cast<char>(tolower(static_cast<unsigned char>(secim)));
+
+        // satır silme 
+        if (secim == '1') {
+            degisiklikOldu = true;
+            if (satirSil()) { 
+                dugumSilindi = true;
+                break;
+            }
+            break; // ana menüye dön
+
+        // sütun silme 
+        } else if (secim == '2') {
+            degisiklikOldu = true;
+            if (sutunSil()) { 
+                dugumSilindi = true;
+                break;
+            }
+            break; // ana menüye dön
+
+        // satır sütun değiştirme 
+        } else if (secim == '3') {
+            satirSutunDegistir();
+            break; // ana menüye dön
+
+        // ana menüye dön
+        } else if (secim == 'x') {
+            break; 
+        }
+    }
+
+    // degisiklik olmadıysa yeniden sıralama , olduysa artOrta göre sırala
+    if (degisiklikOldu && !dugumSilindi && seciliDugum != nullptr) {
+        liste->ortGoreSirala();
+        seciliIndex = liste->indexBul(seciliDugum);
+    }
+}
+
+bool Uygulama::satirSil() {
+    int seciliSatir = 0;
+    char secim;
+
+        // satır silme menusu 
+    while (true) {
+        system("cls");
+        cout << "=== SATIR SILME (Ort: " << fixed << setprecision(2)
+             << seciliDugum->matris->artOrt() << ") ===" << endl << endl;
+
+        seciliDugum->matris->yazdirSeciliSatir(seciliSatir);
+
+        cout << endl << "[W] Yukari   [S] Asagi   [D] Satiri Sil   [X] Ana Menuye Don" << endl;
+        cout << "Seciminiz: ";
+        cin >> secim;
+        cin.ignore(1000, '\n');
+        secim = static_cast<char>(tolower(static_cast<unsigned char>(secim)));
+
+        switch (secim) {
+            // üstteki satıra geç
+            case 'w':
+                if (seciliSatir > 0) seciliSatir--;
+                break;
+            case 's':
+            // alttaki satıra geç
+                if (seciliSatir < seciliDugum->matris->getSatir() - 1) seciliSatir++;
+                break;
+            // seçili satırı sil
+            case 'd':
+                seciliDugum->matris->satirSil(seciliSatir);
+                // tüm satırlar silindiyse düğümü sil
+                if (seciliDugum->matris->MatrisBosMu()) {
+                    seciliDugum = liste->dugumSil(seciliDugum);
+                    seciliIndex = (seciliDugum != nullptr) ? liste->indexBul(seciliDugum) : -1;
+                    return true; // düğüm tamamen silindi
+                }
+                // satır varsa o satırı sil
+                if (seciliSatir >= seciliDugum->matris->getSatir()) {
+                    seciliSatir = seciliDugum->matris->getSatir() - 1;
+                }
+                break;
+            // ana menüye dön
+            case 'x':
+                return false;
+            default:
+                break;
+        }
+    }
+}
+
+bool Uygulama::sutunSil() {
+    int seciliSutun = 0;
+    char secim;
+
+        // sütun silme menüsü
+    while (true) {
+        system("cls");
+        cout << "=== SUTUN SILME (Ort: " << fixed << setprecision(2)
+             << seciliDugum->matris->artOrt() << ") ===" << endl << endl;
+
+        seciliDugum->matris->yazdirSeciliSutun(seciliSutun);
+
+        cout << endl << "[A] Sol   [D] Sag   [F] Sutunu Sil   [X] Ana Menuye Don" << endl;
+        cout << "Seciminiz: ";
+        cin >> secim;
+        cin.ignore(1000, '\n');
+        secim = static_cast<char>(tolower(static_cast<unsigned char>(secim)));
+
+        switch (secim) {
+            // soldaki sütuna geç
+            case 'a':
+                if (seciliSutun > 0) seciliSutun--;
+                break;
+            // sağdaki sütuna geç
+            case 'd':
+                if (seciliSutun < seciliDugum->matris->getSutun() - 1) seciliSutun++;
+                break;
+            // seçili sütunu sil
+            case 'f':
+                seciliDugum->matris->sutunSil(seciliSutun);
+                 // tüm sütunlar silindiyse düğümü sil
+                if (seciliDugum->matris->MatrisBosMu()) {
+                    seciliDugum = liste->dugumSil(seciliDugum);
+                    seciliIndex = (seciliDugum != nullptr) ? liste->indexBul(seciliDugum) : -1;
+                    return true; // düğüm tamamen silindi
+                }
+                // sütun varsa o sütunu sil
+                if (seciliSutun >= seciliDugum->matris->getSutun()) {
+                    seciliSutun = seciliDugum->matris->getSutun() - 1;
+                }
+                break;
+            // ana menüye
+            case 'x':
+                return false;
+            default:
+                break;
+        }
+    }
+}
+
+void Uygulama::satirSutunDegistir() {
+    int satirNo, sutunNo;
+    int maxSatir = seciliDugum->matris->getSatir();
+    int maxSutun = seciliDugum->matris->getSutun();
+
+    // sütun seç
+    cout << "Degistirilecek Sutun Numarasi (1 - " << maxSutun << "): ";  
+    if (!(cin >> sutunNo)) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        return;
+    }
+
+    // satır seç
+    cout << "Degistirilecek Satir Numarasi (1 - " << maxSatir << "): ";
+    if (!(cin >> satirNo)) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        return;
+    }
+    cin.ignore(1000, '\n');
+
+    // yanlış seçim
+    if (!seciliDugum->matris->satirSutunDegistir(satirNo - 1, sutunNo - 1)) {
+        cout << "Gecersiz satir veya sutun numarasi! Devam etmek icin Enter'a basin...";
+        cin.get();
+    }
+}
+
 void Uygulama::calistir() {
     char secim;
     bool devam = true;
@@ -207,7 +398,7 @@ void Uygulama::calistir() {
                 arkaMatrisEkle();
                 break;
             case 'f':
-                // matris islemleri
+                if (seciliDugum != nullptr) matrisIslemMenusu();
                 break;
             case 'x':
                 dosyaYoneticisi->dosyaKaydet(dosyaAdi, liste);
